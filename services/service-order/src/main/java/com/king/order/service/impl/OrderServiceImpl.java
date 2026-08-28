@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 @Slf4j
@@ -20,8 +21,10 @@ public class OrderServiceImpl implements OrderService {
     private DiscoveryClient discoveryClient;
     @Autowired
     private RestTemplate restTemplate;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
     public Order createOrder(Long productId, Long userId) {
-        Product product = getProductFromRemote(productId);
+        Product product = getProductFromRemoteWithAnnotationBalance(productId);
         Order order = new Order();
         order.setId(1L);
         //总金额
@@ -38,6 +41,19 @@ public class OrderServiceImpl implements OrderService {
         ServiceInstance serviceInstance = instances.get(0);
         String url="http://"+serviceInstance.getHost()+":"+serviceInstance.getPort()+"/product/"+productId;
         log.info("远程请求:{}",url);
+        Product forObject = restTemplate.getForObject(url, Product.class);
+        return forObject;
+    }
+    public Product getProductFromRemoteWithBalance(Long productId){
+        ServiceInstance choose = loadBalancerClient.choose("service-product");
+        String url="http://"+choose.getHost()+":"+choose.getPort()+"/product/"+productId;
+        log.info("远程请求:{}",url);
+        Product forObject = restTemplate.getForObject(url, Product.class);
+        return forObject;
+    }
+    //基于注解的负载均衡
+    public Product getProductFromRemoteWithAnnotationBalance(Long productId){
+        String url="http://service-product/product/"+productId;
         Product forObject = restTemplate.getForObject(url, Product.class);
         return forObject;
     }
