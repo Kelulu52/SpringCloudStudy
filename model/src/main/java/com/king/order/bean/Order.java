@@ -1,5 +1,6 @@
 package com.king.order.bean;
 
+import com.king.product.bean.Product;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,5 +13,5 @@ public class Order {
     private Long userId;
     private String nickName;
     private String address;
-    private List<Object> productlist;
+    private List<Product> productlist;
 }

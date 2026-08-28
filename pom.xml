@@ -13,6 +13,7 @@
         <module>services</module>
         <module>services/service-product</module>
         <module>services/service-order</module>
+        <module>model</module>
     </modules>
     <groupId>org.example</groupId>
     <artifactId>cloud-demo</artifactId>
