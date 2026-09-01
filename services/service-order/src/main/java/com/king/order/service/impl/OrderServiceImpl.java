@@ -5,6 +5,7 @@ import java.util.List;
 
 
 import com.king.order.bean.Order;
+import com.king.order.feign.ProductFeignClient;
 import com.king.order.service.OrderService;
 import com.king.product.bean.Product;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +24,11 @@ public class OrderServiceImpl implements OrderService {
     private RestTemplate restTemplate;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
+    @Autowired
+    private ProductFeignClient productFeignClient;
     public Order createOrder(Long productId, Long userId) {
-        Product product = getProductFromRemoteWithAnnotationBalance(productId);
+//        Product product = getProductFromRemoteWithAnnotationBalance(productId);
+        Product product = productFeignClient.getProductById(productId);
         Order order = new Order();
         order.setId(1L);
         //总金额
