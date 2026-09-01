@@ -11,6 +11,11 @@ spring:
             logger-level: full
             connect-timeout: 3000
             read-timeout: 5000
+    sentinel:
+      transport:
+        dashboard: localhost:8080
+      #热加载
+      eager: true
 #            retryer: feign.retryer.Default
 feign:
   sentinel:
