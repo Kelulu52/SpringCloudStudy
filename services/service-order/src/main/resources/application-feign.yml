@@ -16,6 +16,8 @@ spring:
         dashboard: localhost:8080
       #热加载
       eager: true
+      #是否统一上下文，用于链式规则
+      web-context-unify: false
 #            retryer: feign.retryer.Default
 feign:
   sentinel:
