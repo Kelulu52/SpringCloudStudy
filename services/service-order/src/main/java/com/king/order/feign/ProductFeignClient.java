@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @FeignClient(value = "service-product",fallback = ProductFeignFallBack.class)
 public interface ProductFeignClient {
     //这里是发送get请求
-    @GetMapping("/api/product/product/{id}")
+    @GetMapping("/product/{id}")
     Product getProductById(@PathVariable("id") Long id);
 }

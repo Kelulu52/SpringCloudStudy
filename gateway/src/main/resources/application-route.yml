@@ -20,6 +20,9 @@ spring:
           uri: lb://service-order
           predicates:
             - Path=/api/order/**
+          filters:
+            - RewritePath=/api/order/?(?<segment>.*), /$\{segment}
+            - OneceToken=X-Response-Token,jwt
           #匹配顺序
           order: 0
         - id: product-route
@@ -29,4 +32,8 @@ spring:
               args:
                 patterns: /api/product/**
                 matchTrailingSlash: true
+          filters:
+            - RewritePath=/api/product/?(?<segment>.*), /$\{segment}
+      default-filters:
+        - AddResponseHeader=X-Request-red, blue
 
